@@ -1,9 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+var bcrypt = require("bcryptjs");
 
 const app = express();
-
 var corsOptions = {
   origin: "http://localhost:3000"
 };
@@ -17,10 +17,10 @@ app.use(bodyParser.urlencoded({
 }));
 
 const db = require("./models");
+const Op = db.Sequelize.Op;
 
-db.sequelize.sync().then(() => {
-  console.log('Drop and Resync Db');
-  //initial();
+db.sequelize.sync({force: true}).then(() => {
+  initial();
 });
 
 function initial() {
@@ -32,6 +32,24 @@ function initial() {
     id: 2,
     name: "admin"
   });
+  db.user.create({
+      name: "Administrator",
+      surname: "Adminić",
+      username: "admin1",
+      password: bcrypt.hashSync("admin123", 8)
+    })
+    .then(user => {
+      user.setConnections(user.id);
+      db.role.findAll({
+        where: {
+          name: {
+            [Op.or]: ["admin"]
+          }
+        }
+      }).then(roles => {
+        user.setRoles(roles);
+      });
+    });
 }
 
 app.get("/", (req, res) => {
