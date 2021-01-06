@@ -18,13 +18,11 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none"
   },
   title: {
-    display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
     },
   },
   sectionDesktop: {
-    display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
       alignItems: 'center'

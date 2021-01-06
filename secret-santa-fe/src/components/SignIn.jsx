@@ -63,6 +63,7 @@ export default function SignIn(props) {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
+        console.log(response.data);
         props.logStatus();
         history.push("/");
         setSuccess(true);
