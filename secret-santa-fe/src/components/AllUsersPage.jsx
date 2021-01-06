@@ -55,8 +55,45 @@ export default function AllUsersPage(props) {
   const [noMatch, setNoMatch] = useState("");
 
   const classes = useStyles();
-  useEffect(() => {
-  }, [props.data]);
+
+  const ReadPairsFromDatabase = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    let header = "";
+    if (user && user.accessToken)
+      header = { "x-access-token": user.accessToken };
+
+    axios
+      .get("http://localhost:8081/api/getAllMatches", {
+        headers: header,
+      })
+      .then((response) => {
+        let peopleNew = [];
+        let chosenNew = [];
+        console.log(response.data);
+        console.log(response.data.users);
+        console.log(response.data.connections);
+        let indeks;
+        response.data.connections.map((value, i) => {
+            if(response.data.users[i] != value){
+                peopleNew.push(response.data.users[i]);
+                chosenNew.push(value)
+            }
+            else{
+              setNoMatch(response.data.users[i]);
+            }
+        });
+        if(peopleNew.length == response.data.users.length || peopleNew.length == 0)
+            setNoMatch("");
+        console.log("pozvano", peopleNew, chosenNew);
+        setPeople(peopleNew);
+        setChosen(chosenNew);
+        return response.data;
+      })
+      .catch((error) => {
+        console.log("Greska u get All pairs!");
+        console.log(error);
+      });
+  };
 
   const GeneratePairs = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -92,6 +129,10 @@ export default function AllUsersPage(props) {
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    ReadPairsFromDatabase();
+  }, []);
 
   return (
     <div className={classes.root}>

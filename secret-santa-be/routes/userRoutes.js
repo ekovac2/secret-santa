@@ -10,7 +10,7 @@ module.exports = function (app) {
             "x-access-token, Origin, Content-Type, Accept"
         );
         next();
-    });
+    }); 
  
     app.post(
         "/api/generatePermutationFromNumber",
@@ -28,6 +28,12 @@ module.exports = function (app) {
         "/api/getUserMatch",
         [authJwt.verifyToken],
         controller.getUserMatch
+    );
+
+    app.get(
+        "/api/getAllMatches",
+        [authJwt.verifyToken, authJwt.isAdmin],
+        controller.getAllMatches
     );
 
 };

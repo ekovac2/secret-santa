@@ -100,5 +100,24 @@ exports.getUserMatch = (req, res) => {
         res.status(500).send({
             message: err.message
         });
-    });;
+    });
+};
+
+exports.getAllMatches = (req, res) => {
+      db.user.findAll({
+        include: [{ 
+            model: db.user,
+            as: 'connections',
+            attributes: ['name', 'surname']
+          }]
+      }).then(users => {
+          let useri = [];
+          let konekcije = [];
+          for(let i = 0; i < users.length; i++){
+              useri.push(users[i].name + " " + users[i].surname);
+              konekcije.push(users[i].connections[0].name + " " + users[i].connections[0].surname);
+          }
+          res.writeHead(200, {"Content-Type": "application/json"});
+          res.end(JSON.stringify({users: useri, connections: konekcije}));
+      });
 };
