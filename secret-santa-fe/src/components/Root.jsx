@@ -74,7 +74,7 @@ function UserRoutes({user}) {
                 <HomePage/>
             </Route>
             <Route exact path="/userPage">
-                <UserPage/>
+                <UserPage data={user}/>
             </Route>
         </Fragment>
     )
