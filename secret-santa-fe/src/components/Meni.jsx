@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import { fade, makeStyles} from '@material-ui/core/styles';
+import React, {Fragment, useState} from 'react';
+import { makeStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,15 +10,9 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import AcUnitOutlined from '@material-ui/icons/AcUnitOutlined';
 import { Button } from '@material-ui/core';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
+  BrowserRouter as 
   Link
 } from "react-router-dom";
-import AddUser from './AddUser';
-import SignIn from './SignIn';
-import HomePage from './HomePage';
-import UserPage from './UserPage';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -50,9 +44,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function Meni() {
+export default function Meni({logStatus, isLoggedIn}) {
   const classes = useStyles();
-  const [loginStatus, setLoginStatus] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
@@ -63,19 +56,11 @@ export default function Meni() {
     setAnchorEl(null);
   };
 
-  const logStatus = () => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if(user && user.accessToken)
-      setLoginStatus(true);
-    else
-      setLoginStatus(false);
-  }
-
-
   const logout = () => {
     localStorage.removeItem("user");
     logStatus();
   };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -99,7 +84,6 @@ export default function Meni() {
   return (
     
     <div className={classes.grow}>
-      <Router>
       <AppBar position={`fixed`} className={classes.appBar}>
         <Toolbar>
           <Link className={classes.menuButton} to="/">
@@ -110,43 +94,32 @@ export default function Meni() {
           </Typography>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            {loginStatus ? 
-                <IconButton
-                edge="end"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <Button color="secondary" onClick = {()=>{logout();}}>
-                  <Link className={classes.menuButton} to="/">Logout</Link>
-                </Button>
-                <AccountCircle />
-              </IconButton> :
-              <Button color="secondary">
-                <Link className={classes.menuButton} to="/signIn">Login</Link>
-              </Button>
-          }
+                { isLoggedIn ?
+                <Fragment>
+
+                    <Button color="secondary" onClick = {()=>{logout();}}>
+                      <Link className={classes.menuButton} to="/">Logout</Link>
+                    </Button>
+                    <IconButton
+                    edge="end"
+                    aria-label="account of current user"
+                    aria-controls={menuId}
+                    aria-haspopup="true"
+                    onClick={handleProfileMenuOpen}
+                    color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    {renderMenu}
+                  </Fragment>
+                  :
+                  <Button color="secondary">
+                    <Link className={classes.menuButton} to="/signIn">Login</Link>
+                  </Button>
+                }
           </div>
         </Toolbar>
       </AppBar>
-      {renderMenu}
-        <Switch>
-          <Route exact path="/">
-            <HomePage/>
-          </Route>
-          <Route exact path="/signIn">
-            <SignIn logStatus={logStatus}/>
-          </Route>
-          <Route exact path="/addUser">
-            <AddUser/>
-          </Route>
-          <Route exact path="/userPage">
-            <UserPage data={{first_name: "Edina", last_name: "Kovač"}}/>
-          </Route>
-        </Switch>
-      </Router>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from 'react-router-dom';
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,8 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import HomePage from "./HomePage";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     textDecoration: "none",
   },
+  alert: {
+    margin: theme.spacing(3, 0, 2),
+    justifyContent: "center",
+  },
 }));
 
 export default function SignIn(props) {
@@ -43,8 +47,13 @@ export default function SignIn(props) {
   }, [props.logStatus]);
 
   const classes = useStyles();
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [success, setSuccess] = useState(false);
+  const [message, setMessage] = useState(false);
+
+  const history = useHistory();
 
   const signInToAccount = (username, password) => {
     console.log(username, password);
@@ -55,16 +64,26 @@ export default function SignIn(props) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
         props.logStatus();
+        history.push("/");
+        setSuccess(true);
+        setMessage(true);
+        setTimeout(() => {
+          setMessage(false);
+        }, 2000);
         return response.data;
       })
       .catch((error) => {
+        setSuccess(false);
+        setMessage(true);
+        setTimeout(() => {
+          setMessage(false);
+        }, 2000);
         console.log("Greska u post sign in!");
         console.log(error);
       });
   };
   return (
     <Container component="main" maxWidth="xs">
-      <Router>
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
@@ -110,18 +129,21 @@ export default function SignIn(props) {
                 signInToAccount(username, password);
               }}
             >
-              <Link className={classes.menuButton} to="/">
-                Submit
-              </Link>
+              Submit
             </Button>
+            {message ? (
+            <Alert
+              fullWidth
+              className={classes.alert}
+              severity={success ? "success" : "error"}
+            >
+              {success ? "Successfully added user!" : "Something went wrong!"}
+            </Alert>
+          ) : (
+            <div></div>
+          )}
           </form>
         </div>
-        <Switch>
-          <Route exact path="/">
-
-          </Route>
-        </Switch>
-      </Router>
     </Container>
   );
 }

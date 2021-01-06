@@ -1,10 +1,10 @@
 import './App.css';
-import Meni from './components/Meni';
+import Root from './components/Root';
 
 function App() {
   return (
     <div className="App">
-      <Meni/>
+      <Root />
     </div>
   );
 }
