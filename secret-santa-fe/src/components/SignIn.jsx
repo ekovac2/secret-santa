@@ -137,7 +137,7 @@ export default function SignIn(props) {
               className={classes.alert}
               severity={success ? "success" : "error"}
             >
-              {success ? "Successfully added user!" : "Something went wrong!"}
+              {success ? "Successfully loged in!" : "Something went wrong!"}
             </Alert>
           ) : (
             <div></div>

@@ -171,13 +171,6 @@ export default function AddUser() {
           >
             submit
           </Button>
-          <Grid container justify="center">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
           {message ? (
             <Alert
               fullWidth

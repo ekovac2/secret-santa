@@ -2,11 +2,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -52,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
 export default function AllUsersPage(props) {
   const [people, setPeople] = useState([]);
   const [chosen, setChosen] = useState([]);
-  const [noMatch, setNoMatch] = useState("");
+
+  const [unmatched, setUnmatched] = useState([]);
 
   const classes = useStyles();
 
@@ -67,6 +63,8 @@ export default function AllUsersPage(props) {
         headers: header,
       })
       .then((response) => {
+        let newUnmatched = [];
+
         let peopleNew = [];
         let chosenNew = [];
         console.log(response.data);
@@ -75,15 +73,15 @@ export default function AllUsersPage(props) {
         let indeks;
         response.data.connections.map((value, i) => {
             if(response.data.users[i] != value){
+
                 peopleNew.push(response.data.users[i]);
                 chosenNew.push(value)
             }
             else{
-              setNoMatch(response.data.users[i]);
+                newUnmatched.push(response.data.users[i])
             }
         });
-        if(peopleNew.length == response.data.users.length || peopleNew.length == 0)
-            setNoMatch("");
+        setUnmatched(newUnmatched);
         console.log("pozvano", peopleNew, chosenNew);
         setPeople(peopleNew);
         setChosen(chosenNew);
@@ -115,11 +113,11 @@ export default function AllUsersPage(props) {
                 chosenNew.push(value)
             }
             else{
-                setNoMatch(response.data.people[i]);
+                setUnmatched([response.data.people[i]]);
             }
         });
         if(peopleNew.length == response.data.people.length)
-            setNoMatch("");
+            setUnmatched([]);
         setPeople(peopleNew);
         setChosen(chosenNew);
         return response.data;
@@ -169,13 +167,18 @@ export default function AllUsersPage(props) {
           </Table>
         </TableContainer>
         <Toolbar />
-        <Typography className={classes.text} variant={`h6`} gutterBottom>
+        <Typography className={classes.text} variant={"h6"} gutterBottom>
             People without match
         </Typography>
         <Divider />
-        <Typography className={classes.text1} variant={`h6`} gutterBottom>
-            {noMatch}
-        </Typography>
+        {unmatched.map((noMatch)=>{
+          return (
+            <Typography className={classes.text1} variant={"h6"} gutterBottom>
+                {noMatch}
+            </Typography>
+          )
+        })}
+
       </main>
     </div>
   );
