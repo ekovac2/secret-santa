@@ -4,7 +4,7 @@ Secret-Santa
 ## Description
 So what is Secret Santa?
 Secret Santa is a tradition. Members of a group of friends, family, or coworkers draw random names to become someone’s Secret Santa. The Secret Santa is given a wish list of gift ideas to choose from to give to their chosen giftee.
-The application is used to generate pairs of people who will become secret Santa to other people.
+This application is used to generate pairs of people who will become secret Santa to other people.
 
 ## Launching application 
 
