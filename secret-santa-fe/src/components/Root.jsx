@@ -1,62 +1,37 @@
-import React, {useState, useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import React, {useState, useEffect, Fragment} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
+  Route
 } from "react-router-dom";
 import AddUser from './AddUser';
 import SignIn from './SignIn';
 import HomePage from './HomePage';
 import UserPage from './UserPage';
+import AllUsersPage from './AllUsersPage'
 import Meni from './Meni';
 
-const useStyles = makeStyles((theme) => ({
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    color: "white",
-    textDecoration: "none"
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  link: {
-    textDecoration: "none"
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: '#2E3B55'
-  }
-}));
+import NotLoggedInItems from './MenuItems/NotLoggedInItems';
+import AdminItems from './MenuItems/AdminItems';
+import UserItems from './MenuItems/UserItems';
 
 export default function Root(props) {
-
-  const classes = useStyles();
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [user, setUser] = useState(null);
   
 
   const logStatus = () => {
     let user = JSON.parse(localStorage.getItem('user'));
     if(user && user.accessToken){
-        setLoginStatus(true);
-        return true;
+        setUser(user);
     }
     else {
-        setLoginStatus(false);
-        return false;
+        setUser(null);
     }
+  }
+
+  const logout = () => {
+      localStorage.removeItem('user');
+      logStatus();
   }
 
   useEffect(() => {
@@ -65,29 +40,61 @@ export default function Root(props) {
 
   return (
     <Router>
-        <Meni logStatus={logStatus} isLoggedIn={loginStatus}/>
-    { loginStatus ?
-            <Switch>
-                <Route exact path="/">
-                    <HomePage/>
-                </Route>
-                <Route exact path="/addUser">
-                    <AddUser/>
-                </Route>
-                <Route exact path="/userPage">
-                    <UserPage data={{first_name: "Edina", last_name: "Kovač"}}/>
-                </Route>
-            </Switch>
-    : 
+        <Meni>
+            {   !user && <NotLoggedInItems />  }
+            {   user && user.roles[0] == "ROLE_ADMIN" && <AdminItems logout={logout} /> }
+            {   user && user.roles[0] == "ROLE_USER" && <UserItems logout={logout} /> }
+        </Meni>
         <Switch>
+            {   !user && <NoLoginRoutes logStatus={logStatus} /> }
+            {   user && user.roles[0] == "ROLE_ADMIN" && <AdminRoutes user={user} /> }
+            {   user && user.roles[0] == "ROLE_USER" && <UserRoutes user={user} /> }
+        </Switch>
+    </Router>
+  );
+}
+
+function NoLoginRoutes({logStatus}) {
+    return (
+        <Fragment>
             <Route exact path="/">
                 <HomePage/>
             </Route>
             <Route exact path="/signIn">
                 <SignIn logStatus={logStatus}></SignIn>
             </Route>
-        </Switch>
-    }
-    </Router>
-  );
+        </Fragment>
+    )
+}
+
+function UserRoutes({user}) {
+    return (
+        <Fragment>
+            <Route exact path="/">
+                <HomePage/>
+            </Route>
+            <Route exact path="/userPage">
+                <UserPage data={{first_name: user.name, last_name: user.surname}}/>
+            </Route>
+        </Fragment>
+    )
+}
+
+function AdminRoutes({user}) {
+    return (
+        <Fragment>
+            <Route exact path="/">
+                <HomePage/>
+            </Route>
+            <Route exact path="/addUser">
+                <AddUser/>
+            </Route>
+            <Route exact path="/userPage">
+                <UserPage data={{first_name: user.name, last_name: user.surname}}/>
+            </Route>
+            <Route exact path="/allUsers">
+                <AllUsersPage />
+            </Route>
+        </Fragment>
+    )
 }
