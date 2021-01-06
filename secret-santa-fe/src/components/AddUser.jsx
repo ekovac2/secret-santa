@@ -54,6 +54,14 @@ export default function AddUser() {
 
     let roles = ["user"];
     console.log(name, surname, username, password);
+    if(name == "" || surname == "" || username =="" || password == ""){
+      setSuccess(false);
+      setMessage(true);
+      setTimeout(() => {
+        setMessage(false);
+      }, 2000);
+    }
+    else{
     axios
       .post(
         "http://localhost:8081/api/auth/signup",
@@ -77,6 +85,7 @@ export default function AddUser() {
         console.log("Greska u post dodavanje usera!");
         console.log(error);
       });
+    }
   };
 
   return (
