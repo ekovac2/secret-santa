@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn(props) {
   useEffect(() => {
-    console.log(`props changed`, props);
   }, [props.logStatus]);
 
   const classes = useStyles();

@@ -9,7 +9,7 @@ export default function AdminItems({logout}) {
         <ProfileMenu options={[
           {path: '/addUser', name: 'Add User'},
           {path: '/userPage', name: 'User Page'},
-          {path: '/allUsers', name: 'All Users'}
+          {path: '/allUsers', name: 'Generate Pairs'}
         ]}
         />
     </Fragment>

@@ -20,17 +20,17 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: `flex`,
+    display: "flex",
     height: "100vh"
   },
   text: {
     padding: theme.spacing(2, 2, 0),
-    textAlign: `center`,
+    textAlign: "center",
   },
   textMain: {
     marginLeft: theme.spacing(50),
     padding: theme.spacing(2, 2, 0),
-    textAlign: `center`,
+    textAlign: "center",
   },
   paper: {
     paddingBottom: 50,
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   listText: {
     padding: theme.spacing(0, 7, 0),
-    textAlign: `left`,
+    textAlign: "left",
   },
   drawer: {
     width: 500,
@@ -51,13 +51,13 @@ const useStyles = makeStyles((theme) => ({
     width: 500,
   },
   drawerContainer: {
-    overflow: `auto`,
-    margin: `auto`,
+    overflow: "auto",
+    margin: "auto",
   },
   content: {
     flexGrow: 3,
     padding: theme.spacing(5),
-    width: `500vh`,
+    width: "500vh",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
@@ -101,21 +101,21 @@ export default function UserPage(props) {
       <CssBaseline />
       <Drawer
         className={classes.drawer}
-        variant={`permanent`}
+        variant={"permanent"}
         classes={{
           paper: classes.drawerPaper,
         }}
       >
         <Toolbar />
         <div className={classes.drawerContainer}>
-          <Grid container spacing={0} justify={`center`}>
+          <Grid container spacing={0} justify={"center"}>
             <Avatar>
                 <Face/>
             </Avatar>
           </Grid>
-          <Grid container spacing={0} justify={`center`}>
-            <Typography className={classes.text} variant={`h5`} gutterBottom>
-              {props.data.name ? props.data.name : `No Name`} {props.data.surname ? props.data.surname : `Surname`}
+          <Grid container spacing={0} justify={"center"}>
+            <Typography className={classes.text} variant={"h5"} gutterBottom>
+              {props.data.name ? props.data.name : "No Name"} {props.data.surname ? props.data.surname : "Surname"}
             </Typography>
           </Grid>
           <React.Fragment>
@@ -123,7 +123,7 @@ export default function UserPage(props) {
               <ListItemAvatar>
                 <PermIdentity />
               </ListItemAvatar>
-              <ListItemText primary={props.data.username ? props.data.username : `No username available`} secondary={`Username`} />
+              <ListItemText primary={props.data.username ? props.data.username : "No username available"} secondary={"Username"} />
             </ListItem>
             <Divider />
             <ListItem button>
@@ -131,8 +131,8 @@ export default function UserPage(props) {
                 <VpnKey />
               </ListItemAvatar>
               <ListItemText
-                primary={props.data.password ? props.data.hometown.password : `*******`}
-                secondary={`Password`}
+                primary={props.data.password ? props.data.hometown.password : "*******"}
+                secondary={"Password"}
               />
             </ListItem>
             <Divider />
@@ -141,8 +141,8 @@ export default function UserPage(props) {
                 <VerifiedUser />
               </ListItemAvatar>
               <ListItemText
-                primary={props.data.roles ? props.data.roles : ``}
-                secondary={`Role`}
+                primary={props.data.roles ? props.data.roles : ""}
+                secondary={"Role"}
               />
             </ListItem>
           </React.Fragment>
@@ -150,10 +150,10 @@ export default function UserPage(props) {
       </Drawer>
       <main className={classes.content}>
         <Toolbar />
-        <Typography className={classes.textMain} variant={`h6`} gutterBottom>
+        <Typography className={classes.textMain} variant={"h6"} gutterBottom>
           Secret pair for you is...
         </Typography>
-        <Typography className={classes.textMain} variant={`h6`} gutterBottom>
+        <Typography className={classes.textMain} variant={"h6"} gutterBottom>
           {connection}
         </Typography>
       </main>

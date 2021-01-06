@@ -74,7 +74,7 @@ function UserRoutes({user}) {
                 <HomePage/>
             </Route>
             <Route exact path="/userPage">
-                <UserPage data={{first_name: user.name, last_name: user.surname}}/>
+                <UserPage/>
             </Route>
         </Fragment>
     )

@@ -52,6 +52,7 @@ exports.generatePermutationFromFromDatabase = (req, res) => {
                         paroviBiraju.push(users[peopleArr[i]].name + " " + users[peopleArr[i]].surname);
                         paroviIzabrani.push(users[chosen[i]].name + " " + users[chosen[i]].surname);
                     } else {
+                        users[peopleArr[i]].setConnections(users[peopleArr[i]].id);
                         paroviBiraju.push(users[peopleArr[i]].name + " " + users[peopleArr[i]].surname);
                         paroviIzabrani.push("No pair to choose");
                     }
